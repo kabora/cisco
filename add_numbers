@@ -1,0 +1,8 @@
+import sys #allows to take input from the user
+import math #allows to use mathematical operations
+
+x = input('write a number to add:') #we can also define our input as integer here as x = int input('first number')
+a = int(x)
+y = int (input('write the second number:'))
+z = a + y
+print(z)
