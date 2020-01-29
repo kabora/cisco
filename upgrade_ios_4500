@@ -1,0 +1,34 @@
+#Pre-requisites
+#Make sure that the image is copied to both the active and standby SUP's.
+#Config-reg needs to be 0x2102
+#verify the output for the command Show bootvar, if everything looks good reload the device manually
+#reload the standby SUP and once it comes up reload the active SUP using commands below
+# redundancy reload peer
+# #redundancy force-switchover
+
+import getpass
+import sys
+import telnetlib
+
+host = "10.77.178.158"
+user = input("Enter the username:") #expecting user name as string
+password = getpass.getpass() #pass the password
+tn = telnetlib.Telnet(host)
+tn.read_until(b"Username:")
+tn.write(user.encode("ascii")+ b"\n")
+
+if password:
+    tn.read_until(b"Password:")
+    tn.write(password.encode("ascii")+b"\n")
+
+
+tn.write(b"show bootvar\n")
+tn.write(b"conf t\n")
+tn.write(b"no boot sys\n")
+tn.write(b"boot sys flash:cat4500es8-universal.SPA.03.08.06.E.152-4.E6.bin\n") #The new ios image
+tn.write(b"config-reg 0x2102\n")
+tn.write(b"do wr mem\n")
+tn.write(b"end\n")
+tn.write(b"Sh bootvar\n")
+tn.write(b"exit\n")
+print(tn.read_all().decode("ascii")) #copy the output
