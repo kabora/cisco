@@ -1,0 +1,23 @@
+import getpass
+import sys
+import telnetlib
+
+host = "10.77.178.158"
+user = input("Enter the username:") #expecting user name as string
+password = getpass.getpass() #pass the password
+tn = telnetlib.Telnet(host)
+tn.read_until(b"Username:")
+tn.write(user.encode("ascii")+ b"\n")
+
+if password:
+    tn.read_until(b"Password:")
+    tn.write(password.encode("ascii")+b"\n")
+
+tn.write(b"en \n")
+tn.write(b"cisco\n") #your enable password
+tn.write(b"conf t\n")
+tn.write(b"int loopback 1\n")
+tn.write(b"ip add 1.1.1.1 255.255.255.255\n")
+tn.write(b"end\n")
+tn.write(b"exit\n")
+print(tn.read_all().decode("ascii")) #copy the output
