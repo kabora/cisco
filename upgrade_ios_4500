@@ -21,7 +21,8 @@ if password:
     tn.read_until(b"Password:")
     tn.write(password.encode("ascii")+b"\n")
 
-
+tn.write(b"en\n")
+tn.write(b"password\n")
 tn.write(b"show bootvar\n")
 tn.write(b"conf t\n")
 tn.write(b"no boot sys\n")
